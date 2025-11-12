@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -14,8 +15,14 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 // Routes
+const getName = () => {
+  // Support both `name` and `NAME` as env variable keys
+  return process.env.name || process.env.NAME || 'User';
+};
+
 app.get('/', (req, res) => {
-  res.type('text/plain').send('Hello from Express server!\n');
+  const name = getName();
+  res.type('text/plain').send(`Hello ${name}!\n`);
 });
 
 app.get('/status', (req, res) => {
